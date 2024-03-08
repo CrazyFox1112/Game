@@ -1,35 +1,27 @@
+# import pygame
+# import random
 
-from fight_scene import *
-
-from Settings import *
-pygame.init()
-pygame.display.set_caption("Main")
-battle_scene = BattleScene()
-
-
-
-
-# Основной цикл программы
-running = True
-while running:
-    screen.fill(BLACK)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Проверяем нажатие на кнопку
-            if battle_scene.button_attack.is_clicked(pygame.mouse.get_pos()) or battle_scene.button_heal.is_clicked(pygame.mouse.get_pos()):
-                # Запускаем сцену битвы
-                battle_scene.run()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:  # Проверяем нажатие на клавишу "пробел"
-                battle_scene.run()
-                enemy.health = enemy.max_health
-
-    pygame.display.flip()
+# from Settings import *
+# pygame.init()
+# sc = pygame.display.set_mode((widht, high))
+# pygame.display.set_caption("Game")
+# clock = pygame.time.Clock()
+# running = True
+#
+# r_color = random.choice([BLUE, BLACK, GREEN, RED, WHITE])
+# square = pygame.Surface((50, 70))
+# square.fill(RED)
+#
+# while running:
+#     pygame.display.update()
+#     clock.tick(fps)я
+#
+#
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+#             pygame.quit()
 
 
-pygame.quit()
-sys.exit()
 
 
