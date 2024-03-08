@@ -1,5 +1,5 @@
 import pygame
-import sys
+
 
 width = 1280
 height = 720
@@ -19,42 +19,19 @@ pygame.font.init()
 font = pygame.font.Font(None, 36)
 text_color = (0, 0, 0)  # Цвет текста (RGB)
 text_surface = font.render("Удар!", True, text_color)
-# Размер изображения
-new_width = 100
-new_height = 200
+button_width = 100
+button_height = 50
+button_padding = 20
+# Загрузка изображения фона
+background_image = pygame.image.load('img/BG_2.jpg')
+background_rect = background_image.get_rect()
+# Создание двух кнопок
+
+button1_x = (width - button_width * 2 - button_padding) // 2
+button2_x = button1_x + button_width + button_padding
+button_y = (height - button_height)
 
 
-# Класс кнопки
-class Button:
-    def __init__(self, x, y, width, height, color, text=''):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = color
-        self.text = text
-    def draw(self):
-        pygame.draw.rect(screen, self.color, self.rect)
-        if self.text != '':
-            text_surface = font.render(self.text, True, WHITE)
-            text_rect = text_surface.get_rect(center=self.rect.center)
-            screen.blit(text_surface, text_rect)
-
-    def is_clicked(self, pos):
-        return self.rect.collidepoint(pos)
-
-
-# Функция для появления и исчезания текста
-# Функция для появления и исчезания текста
-def appear_and_disappear_text(text, duration):
-    # Выводим текст на экран
-    text_surface = font.render(text, True, BLACK)
-    text_rect = text_surface.get_rect(center=(width // 2, height // 2))
-    screen.blit(text_surface, text_rect)
-    pygame.display.update(text_rect)
-
-    # Ждем заданное количество миллисекунд
-    pygame.time.delay(duration)
-
-    # Убираем текст
-    pygame.display.update(text_rect)
 
 
 
