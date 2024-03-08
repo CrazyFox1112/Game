@@ -1,5 +1,5 @@
-import pygame
 from Settings import *
+
 
 class Character:
     def __init__(self, name, health, attack_power, heal_power, actions=None):
@@ -9,6 +9,7 @@ class Character:
         self.attack_power = attack_power
         self.heal_power = heal_power
         self.actions = actions if actions is not None else []
+
     def attack(self):
         return self.attack_power
 
@@ -35,5 +36,6 @@ class Character:
             pygame.draw.rect(screen, RED, (x, y, hp_bar_length, height))
 
 
-player = Character("Игрок", health=100, attack_power=20, heal_power=100, actions=["attack", "heal"])
-enemy = Character("Враг", health=100, attack_power=10, heal_power=5, actions=["attack", "heal"])
+player = Character("Игрок", health=100, attack_power=20, heal_power=10, actions=["атака", "лечение"])
+enemy = Character("Враг", health=100, attack_power=10, heal_power=5, actions=["атака", "лечение"])
+
