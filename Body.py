@@ -1,35 +1,30 @@
 import pygame
 import sys
+import Settings
+
+def appear_and_disappear_text(text, duration):
+    start_time = pygame.time.get_ticks()  # Запоминаем время начала отображения текста
+
+    while pygame.time.get_ticks() - start_time < duration:  # Пока не прошло достаточно времени
+        # Выводим текст на экран
+        screen.fill(WHITE)
+        text_surface = Settings.font.render(text, True, Settings.BLACK)
+        text_rect = text_surface.get_rect(center=(width // 2, height // 2))
+        screen.blit(text_surface, text_rect)
+        pygame.display.update(text_rect)
 
 # Инициализация Pygame
 pygame.init()
 
 # Установка размеров экрана
-width = 800
-height = 600
+width = 1280
+height = 720
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Text Display")
+pygame.display.set_caption("Semi-Transparent Rectangles")
 
 # Цвета
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-
-# Шрифт и его размер
-font = pygame.font.Font(None, 36)
-
-# Функция для вывода текста на экран и его последующего исчезновения
-def display_text(message, duration):
-    text_surface = font.render(message, True, WHITE)
-    text_rect = text_surface.get_rect(center=(width // 2, height // 2))
-    screen.blit(text_surface, text_rect)
-    pygame.display.flip()  # Обновление экрана, чтобы текст отобразился
-
-    # Ожидаем заданное количество миллисекунд
-    pygame.time.wait(duration)
-
-    # После истечения времени исчезаем текст
-    text_rect.x = -text_rect.width  # Перемещаем текст за пределы экрана
-    pygame.display.flip()  # Обновляем экран, чтобы скрыть текст
+GREY = (128, 128, 128, 128)  # Серый цвет с уровнем прозрачности 128
 
 # Основной цикл программы
 running = True
@@ -37,13 +32,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                display_text("Привет, мир!", 2000)  # Вызываем функцию для вывода текста на 2 секунды
 
-    pygame.display.update()
+    screen.blit(Settings.background_image_1, Settings.background_rect_1)  # Заливка экрана белым цветом
+
+
+    pygame.display.flip()
 
 # Выход из программы
 pygame.quit()
 sys.exit()
-

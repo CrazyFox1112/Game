@@ -44,20 +44,33 @@ class BattleEngine:
 
 
 class Button:
-    def __init__(self, x, y, width, height, color, text=''):
+    def __init__(self, x, y, width, height, color, colortext, text=''):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.text = text
+        self.colortext = colortext
 
-    def draw(self):
-        pygame.draw.rect(screen, self.color, self.rect)
+    def draw(self, screen):
+        # Создаем поверхность с прозрачностью
+        transparent_surface = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
+        transparent_surface.fill((0, 0, 0, 0))  # Прозрачный цвет (альфа = 0)
+
+        # Рисуем прямоугольник на поверхности
+        pygame.draw.rect(transparent_surface, self.color, (0, 0, self.rect.width, self.rect.height))
+
+        # Отображаем текст кнопки на поверхности
         if self.text != '':
-            text_surface = font.render(self.text, True, WHITE)
-            text_rect = text_surface.get_rect(center=self.rect.center)
-            screen.blit(text_surface, text_rect)
+            font_surface = font.render(self.text, True, self.colortext)
+            font_surface.set_alpha(self.colortext[3])
+            font_rect = font_surface.get_rect(center=transparent_surface.get_rect().center)
+            transparent_surface.blit(font_surface, font_rect)
+
+        # Отображаем поверхность на экране
+        screen.blit(transparent_surface, self.rect.topleft)
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
+
 
 
 def appear_and_disappear_text(text, duration):
@@ -65,7 +78,6 @@ def appear_and_disappear_text(text, duration):
 
     while pygame.time.get_ticks() - start_time < duration:  # Пока не прошло достаточно времени
         # Выводим текст на экран
-        screen.fill(WHITE)
         text_surface = font.render(text, True, BLACK)
         text_rect = text_surface.get_rect(center=(width // 2, height // 2))
         screen.blit(text_surface, text_rect)

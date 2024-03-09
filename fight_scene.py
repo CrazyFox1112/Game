@@ -9,10 +9,10 @@ class BattleScene:
     def __init__(self):
         self.battle_engine = BattleEngine(player, enemy)
 
-
+        self.alpha = 0
         # Кнопки
-        self.button_attack = Button(button1_x, button_y, button_width, button_height, RED, 'Attack')
-        self.button_heal = Button(button2_x, button_y, button_width, button_height, RED, 'Heal')
+        self.button_attack = Button(button1_x, button_y, button_width, button_height, (RED[0], RED[1], RED[2], 255), (WHITE[0], WHITE[1], WHITE[2], 255 ), 'Attack')
+        self.button_heal = Button(button2_x, button_y, button_width, button_height, (RED[0], RED[1], RED[2], 255), (WHITE[0], WHITE[1], WHITE[2], 255 ),'Heal')
 
         # Сила удара пресонажей
         self.force_enemy_info = font.render('Сила {}'.format(enemy.attack_power), True, RED)
@@ -22,18 +22,29 @@ class BattleScene:
         self.heal_enemy_info = font.render('Лечение {}'.format(enemy.heal_power), True, GREEN)
         self.heal_player_info = font.render('Лечение {}'.format(player.heal_power), True, GREEN)
 
+        self.text_alpha = 0  # Изначально текст непрозрачен
+        self.text_surface = font.render('Текст появился!', True, WHITE)
+        self.text_rect = self.text_surface.get_rect(center=(width // 2, height  // 2))
+
     # Основной цикл программы
     def run(self):
         running = True
         while running:
 
-            screen.blit(background_image, background_rect)
+            # Плавный переход от черного фона к изображению
+            if self.alpha < 255:
+                self.alpha += 1  # Увеличиваем значение альфа-канала
+                background_image_1.set_alpha(self.alpha)  # Устанавливаем значение альфа-канала изображению
+            else:
+                alpha = 255  # Полностью непрозрачный
+
+            screen.blit(background_image_1, background_rect_1)
 
             # Прямоугольники сверху и снизу
-            pygame.draw.rect(screen, GREY, (0, 0, 1280, 100))
-            pygame.draw.rect(screen, (26, 26, 26), (0, 90, 1280, 10))
-            pygame.draw.rect(screen, GREY, (0, 620, 1280, 100))
-            pygame.draw.rect(screen, (26, 26, 26), (0, 610, 1280, 10))
+            pygame.draw.rect(screen, (GREY[0], GREY[1], GREY[2], self.alpha), (0, 0, 1280, 100))
+            pygame.draw.rect(screen, (26, 26, 26, self.alpha), (0, 90, 1280, 10))
+            pygame.draw.rect(screen, (GREY[0], GREY[1], GREY[2], self.alpha), (0, 620, 1280, 100))
+            pygame.draw.rect(screen, (26, 26, 26, self.alpha), (0, 610, 1280, 10))
 
             enemy.draw_hp_bar(width // 2 + 325, height // 2 - 335, 250, 30)
             hp_enemy = "Хп Врага " + str(enemy.health)
@@ -47,14 +58,18 @@ class BattleScene:
             hp_rect = hp_surface.get_rect(center=(width // 2 - 450, height // 2 + 300))
             screen.blit(hp_surface, hp_rect)
 
-            self.button_attack.draw()
-            self.button_heal.draw()
+            self.button_attack.draw(screen)
+            self.button_heal.draw(screen)
 
             screen.blit(self.force_enemy_info, (10, 20))
             screen.blit(self.force_player_info, (1120, 645))
 
             screen.blit(self.heal_enemy_info, (10, 60))
             screen.blit(self.heal_player_info, (1120, 685))
+
+            # Устанавливаем альфа-канал для текста
+            self.text_surface.set_alpha(self.text_alpha)
+            screen.blit(self.text_surface, self.text_rect)
 
             # Условие нажатия на что-либо
             for event in pygame.event.get():
@@ -70,9 +85,9 @@ class BattleScene:
                             self.battle_engine.enemy_turn()
                         if self.battle_engine.check_game_over():
                             running = False
+                        self.text_alpha = 255
 
-                        appear_and_disappear_text("противник использовал: {}".format(
-                            self.battle_engine.enemy_current_action), 1500)
+
 
                     # Кнопка 2
                     elif self.button_heal.is_clicked(pygame.mouse.get_pos()):
@@ -82,9 +97,10 @@ class BattleScene:
                             self.battle_engine.enemy_turn()
                         if self.battle_engine.check_game_over():
                             running = False
+                        self.text_alpha = 255
 
-                        appear_and_disappear_text("противник использовал: {}".format(
-                            self.battle_engine.enemy_current_action), 1500)
+
 
 
             pygame.display.flip()
+            clock.tick(60)  # Ограничение FPS

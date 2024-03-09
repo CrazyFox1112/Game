@@ -23,15 +23,19 @@ button_width = 100
 button_height = 50
 button_padding = 20
 # Загрузка изображения фона
-background_image = pygame.image.load('img/BG_2.jpg')
-background_rect = background_image.get_rect()
+background_image_1 = pygame.image.load('img/BG_2.jpg')
+background_rect_1 = background_image_1.get_rect()
+
+background_image_2 = pygame.transform.scale(pygame.image.load('img/BG_3.jpg'), (width, height))
+background_rect_2 = background_image_2.get_rect()
 # Создание двух кнопок
 
 button1_x = (width - button_width * 2 - button_padding) // 2
 button2_x = button1_x + button_width + button_padding
 button_y = (height - button_height)
 
-
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
 
 
 
