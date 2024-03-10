@@ -2,17 +2,18 @@ from Units import *
 from Settings import *
 import pygame
 from BattleEngine import Button
+import Heal_Min_Game
+
+heal_min_game = Heal_Min_Game.Heal_Min_game()
 
 
-class HealScene:
+class Chill_room_scene:
     def __init__(self):
-        self.text_alpha = 0  # Изначально текст непрозрачен
-        self.text_surface = font.render('Текст появился!', True, WHITE)
-        self.text_rect = self.text_surface.get_rect(center=(width // 2, height - 50))
         self.alpha = 0
         self.HealButton = Button((width - (button_width + 50)) // 2, (height - (button_height + 25)) // 2,
                                  button_width + 50,
                                  button_height + 25, (2, 46, 14), WHITE, 'Лечение')
+
 
     def run(self):
         running = True
@@ -28,9 +29,11 @@ class HealScene:
             screen.fill(BLACK)  # Заливаем экран черным цветом
             screen.blit(background_image_2, background_rect_2)  # Отображаем изображение с установленным альфа-каналом
 
-            # Устанавливаем альфа-канал для текста
-            self.text_surface.set_alpha(self.text_alpha)
-            screen.blit(self.text_surface, self.text_rect)
+            player.draw_hp_bar(width // 2 - 575, height // 2 + 285, 250, 30)
+            hp = "Ваше ХП " + str(player.health)
+            hp_surface = font.render(hp, True, WHITE)
+            hp_rect = hp_surface.get_rect(center=(width // 2 - 450, height // 2 + 300))
+            screen.blit(hp_surface, hp_rect)
 
             # Отображение кнопки
             self.HealButton.color = (0, 100, 0, self.alpha / 2)
@@ -42,7 +45,8 @@ class HealScene:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.HealButton.is_clicked(pygame.mouse.get_pos()):
-                        self.text_alpha = 255
+                        heal_min_game.run()
+                        running = False
 
             pygame.display.flip()
             clock.tick(60)  # Ограничение FPS

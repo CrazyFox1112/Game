@@ -3,7 +3,7 @@ import sys
 from Settings import *
 from BattleEngine import *
 from Units import *
-
+import time
 # Движок
 class BattleScene:
     def __init__(self):
@@ -22,9 +22,6 @@ class BattleScene:
         self.heal_enemy_info = font.render('Лечение {}'.format(enemy.heal_power), True, GREEN)
         self.heal_player_info = font.render('Лечение {}'.format(player.heal_power), True, GREEN)
 
-        self.text_alpha = 0  # Изначально текст непрозрачен
-        self.text_surface = font.render('Текст появился!', True, WHITE)
-        self.text_rect = self.text_surface.get_rect(center=(width // 2, height  // 2))
 
     # Основной цикл программы
     def run(self):
@@ -37,6 +34,36 @@ class BattleScene:
                 background_image_1.set_alpha(self.alpha)  # Устанавливаем значение альфа-канала изображению
             else:
                 alpha = 255  # Полностью непрозрачный
+
+
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+
+                    # Кнопка 1
+                    if self.button_attack.is_clicked(pygame.mouse.get_pos()):
+                        player_action = 'атака'
+                        self.battle_engine.player_turn(player_action)
+                        if not self.battle_engine.check_game_over():
+                            self.battle_engine.enemy_turn()
+                        if self.battle_engine.check_game_over():
+                            running = False
+                        show_text('противник использовал: {}'.format(self.battle_engine.enemy_current_action), 1000)
+
+
+
+                    # Кнопка 2
+                    elif self.button_heal.is_clicked(pygame.mouse.get_pos()):
+                        player_action = 'лечение'
+                        self.battle_engine.player_turn(player_action)
+                        if not self.battle_engine.check_game_over():
+                            self.battle_engine.enemy_turn()
+                        if self.battle_engine.check_game_over():
+                            running = False
+                        show_text('противник использовал: {}'.format(self.battle_engine.enemy_current_action), 1000)
 
             screen.blit(background_image_1, background_rect_1)
 
@@ -67,37 +94,7 @@ class BattleScene:
             screen.blit(self.heal_enemy_info, (10, 60))
             screen.blit(self.heal_player_info, (1120, 685))
 
-            # Устанавливаем альфа-канал для текста
-            self.text_surface.set_alpha(self.text_alpha)
-            screen.blit(self.text_surface, self.text_rect)
 
-            # Условие нажатия на что-либо
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-
-                    # Кнопка 1
-                    if self.button_attack.is_clicked(pygame.mouse.get_pos()):
-                        player_action = 'атака'
-                        self.battle_engine.player_turn(player_action)
-                        if not self.battle_engine.check_game_over():
-                            self.battle_engine.enemy_turn()
-                        if self.battle_engine.check_game_over():
-                            running = False
-                        self.text_alpha = 255
-
-
-
-                    # Кнопка 2
-                    elif self.button_heal.is_clicked(pygame.mouse.get_pos()):
-                        player_action = 'лечение'
-                        self.battle_engine.player_turn(player_action)
-                        if not self.battle_engine.check_game_over():
-                            self.battle_engine.enemy_turn()
-                        if self.battle_engine.check_game_over():
-                            running = False
-                        self.text_alpha = 255
 
 
 

@@ -4,14 +4,24 @@ from Settings import *
 class Character:
     def __init__(self, name, health, attack_power, heal_power, actions=None):
         self.name = name
-        self.health = health
         self.max_health = health
+        self._health = health  # Приватное поле для хранения текущего здоровья
         self.attack_power = attack_power
         self.heal_power = heal_power
         self.actions = actions if actions is not None else []
 
     def attack(self):
         return self.attack_power
+
+
+
+    @property
+    def health(self):
+        return self._health
+
+    @health.setter
+    def health(self, value):
+        self._health = min(value, self.max_health)
 
     def heal(self):
         return self.heal_power

@@ -1,6 +1,6 @@
 import random
 from Settings import *
-
+import time
 
 class BattleEngine:
     def __init__(self, player, enemy):
@@ -49,6 +49,8 @@ class Button:
         self.color = color
         self.text = text
         self.colortext = colortext
+        self.last_click_time = 0
+        self.click_delay = 2  # Задержка между нажатиями в секундах
 
     def draw(self, screen):
         # Создаем поверхность с прозрачностью
@@ -73,13 +75,10 @@ class Button:
 
 
 
-def appear_and_disappear_text(text, duration):
-    start_time = pygame.time.get_ticks()  # Запоминаем время начала отображения текста
-
-    while pygame.time.get_ticks() - start_time < duration:  # Пока не прошло достаточно времени
-        # Выводим текст на экран
-        text_surface = font.render(text, True, BLACK)
-        text_rect = text_surface.get_rect(center=(width // 2, height // 2))
-        screen.blit(text_surface, text_rect)
-        pygame.display.update(text_rect)
+def show_text(text, duration):
+    text_surface = font.render(text, True, WHITE)
+    text_rect = text_surface.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    screen.blit(text_surface, text_rect)
+    pygame.display.update(text_rect)
+    pygame.time.delay(duration)
 
